@@ -2,6 +2,7 @@
 An asynchronous process rate limiter that works with promises
 
 <h4>Usage</h4>
+
 ```javascript
 const createLimiter = require('async-limiter')
 
