@@ -1,18 +1,21 @@
 {
   "name": "async-limit",
   "version": "1.0.0",
-  "description": "",
+  "description": "An asynchronous process rate limiter that works with promises",
   "main": "index.js",
   "scripts": {
     "build": "babel src/ -d lib && flow-copy-source src lib",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tlaanemaa/async-limit.git"
   },
-  "author": "",
+  "author": "Taavi Laanemaa",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tlaanemaa/async-limit/issues"
