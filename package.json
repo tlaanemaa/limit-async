@@ -2,7 +2,7 @@
   "name": "limit-async",
   "version": "1.0.1",
   "description": "An asynchronous process rate limiter that works with promises",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "babel src/ -d lib && flow-copy-source src lib",
     "test": "jest",
