@@ -1,10 +1,14 @@
+// @flow
 
-export default (limit) => {
-  let running = [];
+type InputFunction = (...args: any) => Promise<any>
+type WrapperFunction = (inputFunction: InputFunction) => InputFunction
+
+export default (limit: number): WrapperFunction => {
+  let running: Array<Promise<any>> = [];
 
   // Return a wrapper function
-  return (inputFunction) => {
-    const callWrapper = (...args) => new Promise((resolve) => {
+  return (inputFunction: InputFunction): InputFunction => {
+    const callWrapper: InputFunction = (...args: any) => new Promise((resolve) => {
       if (running.length < limit) {
         // If we are under the limit, run this job right away
         const currentPromise = inputFunction(...args).then((result) => {
