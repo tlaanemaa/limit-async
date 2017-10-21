@@ -4,6 +4,6 @@
   ],
   "plugins": [
     "transform-flow-strip-types",
-    "transform-export-default"
+    "add-module-exports"
   ]
 }
