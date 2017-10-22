@@ -17,7 +17,7 @@ test('should work on import', () => {
 });
 
 test('should create a limiter function', () => {
-  const limit = createLimiter(10);
+  const limit = createLimiter(1);
   expect(typeof limit).toBe('function');
 });
 
@@ -30,7 +30,7 @@ test('should work with resolved promises', () => {
 });
 
 test('should work with rejected promises', () => {
-  const limit = createLimiter(10);
+  const limit = createLimiter(1);
   return Promise.all([
     limit(testRejectedFunction)(5).catch(reason => expect(reason).toBe(5)),
     limit(testRejectedFunction)(6).catch(reason => expect(reason).toBe(6))
