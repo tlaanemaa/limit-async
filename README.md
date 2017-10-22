@@ -20,7 +20,7 @@ const createLimiter = require('limit-async')
 const limit = createLimiter(10);
 
 // A sample asynchronous function
-// Its basically just a promise wrapper setTimeout
+// Its basically just a promise wrapper for setTimeout
 const myAsyncFunction = value =>
   new Promise(resolve =>
     setTimeout(
