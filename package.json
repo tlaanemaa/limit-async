@@ -12,6 +12,20 @@
   "files": [
     "lib"
   ],
+  "keywords": [
+    "limit",
+    "limited",
+    "limiter",
+    "promise",
+    "promises",
+    "async",
+    "asynchronous",
+    "concurrency",
+    "throttle",
+    "rate",
+    "ratelimit",
+    "queue"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tlaanemaa/limit-async.git"
