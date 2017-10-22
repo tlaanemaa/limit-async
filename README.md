@@ -1,15 +1,25 @@
 # limit-async
 An asynchronous process rate limiter that works with promises
 
-One of the core principles when creating this was to give you as much freedom when using it as possible. Thus it is implemented as a higher order function that will wrap your function and it's promise as transparently as possible. Also, by defining the limit separately, it allows you to apply the same limit to multiple different functions, for example to all HTTP requests.
+One of the core principles when creating this was to give you as much freedom as possible when using it. Thus, it is implemented as a higher order function that will wrap your function and it's promise as transparently as possible. Also, by defining the limit separately, it allows you to apply the same limit to multiple different functions, for example to all HTTP requests (GET, POST, ...).
 
-<h4>Usage</h4>
+
+## Install
+```
+$ npm install --save limit-async
+```
+
+
+## Usage
 
 ```javascript
 const createLimiter = require('limit-async')
 
-const limit = createLimiter(10); // Will limit to 10 concurrent jobs
+// Will limit to 10 concurrent jobs
+const limit = createLimiter(10);
 
+// A sample asynchronous function
+// Its basically just a promise wrapper setTimeout
 const myAsyncFunction = value =>
   new Promise(resolve =>
     setTimeout(
