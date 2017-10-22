@@ -2,10 +2,17 @@
 
 type InputFunction = (...args: any) => Promise<any>
 type WrapperFunction = (inputFunction: InputFunction) => InputFunction
+type Jobs = {
+  running: number,
+  queue: Array<() => void>
+}
 
 export default (limit: number): WrapperFunction => {
-  // Array of currently running jobs
-  let runningJobs: Array<Promise<any>> = [];
+  // Internal state to keep track of running and queued jobs
+  const jobs: Jobs = {
+    running: 0,
+    queue: []
+  };
 
   // Return a wrapper function
   return (inputFunction: InputFunction): InputFunction =>
@@ -13,27 +20,29 @@ export default (limit: number): WrapperFunction => {
     (...args: any) =>
       // ...that returns a wrapper promise
       new Promise((resolve) => {
-        // Define the cheking part as a function so we can call it recursively
-        const checkQueue = () => {
-          if (runningJobs.length < limit) {
-            // If we are under the limit, run this job right away
-            const currentPromise = inputFunction(...args).then((result) => {
-              // Remove this job from the list on completion
-              runningJobs = runningJobs.filter(item => item !== currentPromise);
+        // Wrapper function to run this job
+        const runJob = () => {
+          jobs.running += 1;
 
-              // Resolve the wrapper promise with correct result
-              resolve(result);
-            });
-            runningJobs.push(currentPromise);
-          } else {
-            // Run this function again whenever a job completes to check if our job can be started
-            Promise.race(runningJobs).then(() => {
-              checkQueue();
-            });
-          }
+          // Run the given input function with given arguments
+          inputFunction(...args).then((result) => {
+            jobs.running -= 1;
+
+            // Resolve with given result
+            resolve(result);
+
+            // Run next job if there is one
+            if (jobs.queue.length > 0) {
+              jobs.queue.shift()();
+            }
+          });
         };
 
-        // Call the checker function
-        checkQueue();
+        // Either run the job right away or queue it if needed
+        if (jobs.running < limit) {
+          runJob();
+        } else {
+          jobs.queue.push(runJob);
+        }
       });
 };
