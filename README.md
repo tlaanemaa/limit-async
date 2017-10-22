@@ -7,7 +7,9 @@ One of the core principles when creating this was to give you as much freedom as
 ## Install
 
 ```
+
 $ npm install --save limit-async
+
 ```
 
 
