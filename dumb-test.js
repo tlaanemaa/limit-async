@@ -19,11 +19,15 @@ const myAsyncfunction = (value) => {
     ));
 };
 
-const checkInterval = setInterval(() => console.log('  Currently running', nrRunning, 'jobs...'), 100);
+const checkInterval = setInterval(
+  () => console.log('   Currently running', nrRunning, 'jobs...')
+  , 100
+);
+
 setTimeout(() => clearInterval(checkInterval), 3100);
 for (let i = 0; i < 30; i += 1) {
   limit(myAsyncfunction)(i).then(
-    value => console.log('✓ Resolved', value),
-    reason => console.log('✗ Rejected', reason)
+    value => console.log(' ✓ Resolved', value),
+    reason => console.log(' ✗ Rejected', reason)
   );
 }
