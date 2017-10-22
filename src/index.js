@@ -19,17 +19,17 @@ export default (limit: number): WrapperFunction => {
     // ...that returns a wrapped version of the function
     (...args: any) =>
       // ...that returns a wrapper promise
-      new Promise((resolve) => {
+      new Promise((resolve, reject) => {
         // Wrapper function to run this job
         const runJob = () => {
           jobs.running += 1;
 
           // Run the given input function with given arguments
-          inputFunction(...args).then((result) => {
+          inputFunction(...args).then(
+            result => resolve(result),
+            reason => reject(reason)
+          ).then(() => {
             jobs.running -= 1;
-
-            // Resolve with given result
-            resolve(result);
 
             // Run next job if there is one
             if (jobs.queue.length > 0) {
