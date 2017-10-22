@@ -1,30 +1,38 @@
-const limiter = require('../lib');
+const createLimiter = require('../lib');
 
-// TODO; This test is completely broken for some reason
+// Test function for resolving promises
+const testResolvedFunction = value => new Promise(resolve => setTimeout(
+  () => resolve(value),
+  10
+));
 
-let nrRunning = 0;
+// Test functions for rejecting promises
+const testRejectedFunction = value => new Promise((resolve, reject) => setTimeout(
+  () => reject(value),
+  10
+));
 
-const testFunc = () => {
-  nrRunning += 1;
-  return new Promise(resolve => setTimeout(() => {
-    nrRunning -= 1;
-    resolve();
-  }, 1000));
-};
+test('should work on import', () => {
+  expect(typeof createLimiter).toBe('function');
+});
 
-test('creates only up to 10 jobs', (done) => {
-  const limit = limiter(100);
-  for (let i = 0; i < 30; i += 1) {
-    limit(testFunc)();
-  }
+test('should create a limiter function', () => {
+  const limit = createLimiter(10);
+  expect(typeof limit).toBe('function');
+});
 
-  // Sample the number of running processes
-  setTimeout(() => expect(nrRunning).toEqual(10), 10);
-  setTimeout(() => expect(nrRunning).toEqual(10), 900);
-  setTimeout(() => expect(nrRunning).toEqual(10), 1900);
-  setTimeout(() => expect(nrRunning).toEqual(10), 2900);
-  setTimeout(() => {
-    expect(nrRunning).toEqual(0);
-    done();
-  }, 3500);
+test('should work with resolved promises', () => {
+  const limit = createLimiter(1);
+  return Promise.all([
+    limit(testResolvedFunction)(3).then(result => expect(result).toBe(3)),
+    limit(testResolvedFunction)(4).then(result => expect(result).toBe(4))
+  ]);
+});
+
+test('should work with rejected promises', () => {
+  const limit = createLimiter(10);
+  return Promise.all([
+    limit(testRejectedFunction)(5).catch(reason => expect(reason).toBe(5)),
+    limit(testRejectedFunction)(6).catch(reason => expect(reason).toBe(6))
+  ]);
 });

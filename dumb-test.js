@@ -5,18 +5,25 @@ let nrRunning = 0;
 
 const myAsyncfunction = (value) => {
   nrRunning += 1;
-  return new Promise(resolve =>
+  return new Promise((resolve, reject) =>
     setTimeout(
       () => {
         nrRunning -= 1;
-        resolve(value);
+        if (Math.random() > 0.5) {
+          resolve(value);
+        } else {
+          reject(value);
+        }
       },
-      Math.random() * 1000
+      (Math.random() * 900) + 100
     ));
 };
 
-const checkInterval = setInterval(() => console.log('Currently running', nrRunning, 'jobs...'), 100);
-setTimeout(() => clearInterval(checkInterval), 4000);
+const checkInterval = setInterval(() => console.log('  Currently running', nrRunning, 'jobs...'), 100);
+setTimeout(() => clearInterval(checkInterval), 3100);
 for (let i = 0; i < 30; i += 1) {
-  limit(myAsyncfunction)(i).then(value => console.log('Resolved', value));
+  limit(myAsyncfunction)(i).then(
+    value => console.log('✓ Resolved', value),
+    reason => console.log('✗ Rejected', reason)
+  );
 }
