@@ -25,17 +25,16 @@ export default (limit: number): WrapperFunction => {
           jobs.running += 1;
 
           // Run the given input function with given arguments
-          inputFunction(...args).then(
-            result => resolve(result),
-            reason => reject(reason)
-          ).then(() => {
-            jobs.running -= 1;
+          inputFunction(...args)
+            .then(resolve, reject)
+            .then(() => {
+              jobs.running -= 1;
 
-            // Run next job if there is one
-            if (jobs.queue.length > 0) {
-              jobs.queue.shift()();
-            }
-          });
+              // Run next job if there is one
+              if (jobs.queue.length > 0) {
+                jobs.queue.shift()();
+              }
+            });
         };
 
         // Either run the job right away or queue it if needed
