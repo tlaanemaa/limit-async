@@ -1,4 +1,4 @@
-const createLimiter = require('../lib');
+const createLimiter = require('../src');
 
 // Test function for resolving promises
 const testResolvedFunction = value => new Promise(resolve => setTimeout(
